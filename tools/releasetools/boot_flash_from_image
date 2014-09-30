@@ -95,21 +95,31 @@ copy2(updater, "%s/update-binary" % updater_dir)
 updater_script = "%s/updater-script" % updater_dir
 
 # create the contents
-contents = "ui_print(\"Installing SlimKernel...\");\n"
-if boot_partition_type == "mtd":
-    contents += "package_extract_file(\"boot.img\", \"/tmp/boot.img\");\n"
-    contents += "write_raw_image(\"/tmp/boot.img\", \"%s\");\n" % boot_partition
-elif boot_partition_type == "emmc":
-    contents += "package_extract_file(\"boot.img\", \"%s\");\n" % boot_partition
-elif boot_partition_type == "bml":
-    contents += "assert(package_extract_file(\"boot.img\", \"/tmp/boot.img\")\n"
-    contents += "\twrite_raw_image(\"/tmp/boot.img\", \"%s\")\n" % boot_partition
-    contents += "\tdelete(\"/tmp/boot.img\"));\n"
-contents += "mount(\"%s\", \"EMMC\", \"%s\", \"system\");\n" % (system_partition_type, system_partition)
-contents += "package_extract_dir(\"system\", \"/system\");\n"
+contents = "ui_print(\"\"); show_progress(0.100000, 0);\n"
+contents += "ui_print(\"\");ui_print(\"\");\n"
+contents += "ui_print(\"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\");\n"
+contents += "ui_print(\"       ----=Kernel for SGS3 LTE I9305=----      \");\n"
+contents += "ui_print(\"               ---=For OMNI ROM=---               \");\n"
+contents += "ui_print(\"         -===Based on Boeffla Kernel===-        \");\n"
+contents += "ui_print(\"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\");\n"
+contents += "ui_print(\"\");\n"
+contents += "show_progress(0.100000, 20);\n"
+contents += "ui_print(\"Flashing the kernel\");\n"
+contents += "assert(package_extract_file(\"boot.img\", \"/tmp/boot.img\");\n"
+contents += "show_progress(0.100000, 40);\n"
+contents += "write_raw_image(\"/tmp/boot.img\", \"%s\");\n" % boot_partition
+contents += "show_progress(0.100000, 60);\n"
+contents += "delete(\"/tmp/boot.img\"));\n"
+contents += "mount(\"%s\", \"EMMC\", \"%s\", \"/system\");\n" % (system_partition_type, system_partition)
+contents += "delete_recursive(\"/system/lib/modules\");\n"
+contents += "show_progress(0.100000, 80);\n"
+contents += "package_extract_dir(\"system/lib/modules\", \"/system/lib/modules\");\n"
 contents += "unmount(\"/system\");\n"
-contents += "ui_print(\" \");\n"
-contents += "ui_print(\"Done!\");"
+contents += "show_progress(0.100000, 100);\n"
+contents += "ui_print(\"\");\n"
+contents += "ui_print(\" * The end of installation *\");\n"
+contents += "ui_print(\" * Have fun! *\");\n"
+contents += "ui_print(\"\");\n"
 with open(updater_script, "w") as f:
     f.write(contents)
 
