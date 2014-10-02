@@ -1955,7 +1955,7 @@ $(if $(2), \
   onepct=$$((((($(2) / 100) - 1) / img_blocksize + 1) * img_blocksize)); \
   reserve=$$(((twoblocks > onepct ? twoblocks : onepct) + \
                reservedblocks * img_blocksize)); \
-  maxsize=$$(($(2) - reserve)); \
+  maxsize=$$(($(2) - 1)); \
   echo "$$printname maxsize=$$maxsize blocksize=$$img_blocksize total=$$total reserve=$$reserve"; \
   if [ "$$total" -gt "$$maxsize" ]; then \
     echo "error: $$printname too large ($$total > [$(2) - $$reserve])"; \
